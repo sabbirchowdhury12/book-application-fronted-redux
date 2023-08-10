@@ -1,8 +1,21 @@
+import { signOut } from "firebase/auth";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { auth } from "../firebase/firebase.config";
+import { setUser } from "../redux/user/userSlice";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+
+  const dispatch = useAppDispatch();
+  const { user } = useAppSelector((state) => state.user);
+  const handleLogout = () => {
+    signOut(auth).then(() => {
+      dispatch(setUser(null));
+      console.log("log out done");
+    });
+  };
   return (
     <div>
       <nav className="bg-gray-800">
@@ -32,26 +45,30 @@ const Navbar = () => {
                     All Book
                   </Link>
 
-                  <Link
-                    to={"/login"}
-                    className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                  >
-                    Sign In
-                  </Link>
-
-                  <Link
-                    to={"/signup"}
-                    className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                  >
-                    Sign Up
-                  </Link>
-
-                  <a
-                    href="#"
-                    className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
-                  >
-                    Reports
-                  </a>
+                  {!user?.email ? (
+                    <>
+                      {" "}
+                      <Link
+                        to={"/login"}
+                        className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                      >
+                        Sign In
+                      </Link>
+                      <Link
+                        to={"/signup"}
+                        className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                      >
+                        Sign Up
+                      </Link>
+                    </>
+                  ) : (
+                    <button
+                      onClick={handleLogout}
+                      className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                    >
+                      Logout
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
