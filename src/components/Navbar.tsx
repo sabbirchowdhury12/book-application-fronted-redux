@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { auth } from "../firebase/firebase.config";
 import { setUser } from "../redux/user/userSlice";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { toast } from "react-hot-toast";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,7 +14,7 @@ const Navbar = () => {
   const handleLogout = () => {
     signOut(auth).then(() => {
       dispatch(setUser(null));
-      console.log("log out done");
+      toast.success("log out success");
     });
   };
   return (
