@@ -1,4 +1,3 @@
-import { toast } from "react-hot-toast";
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
   createUserWithEmailAndPassword,
@@ -59,14 +58,12 @@ export const userSlice = createSlice({
         state.isLoading = false;
         state.isError = false;
         state.error = null;
-        toast.success("sign up seccess");
       })
       .addCase(createUser.rejected, (state, action) => {
         state.user.email = null;
         state.isLoading = false;
         state.isError = true;
         state.error = action.error.message!;
-        toast.error("sign up failed");
       })
 
       .addCase(loginUser.pending, (state) => {
@@ -77,14 +74,12 @@ export const userSlice = createSlice({
         state.isLoading = false;
         state.isError = false;
         state.error = null;
-        toast.success("login succeed");
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.user.email = null;
         state.isLoading = false;
         state.isError = true;
         state.error = action.error.message!;
-        toast.error("login failed");
       });
   },
 });

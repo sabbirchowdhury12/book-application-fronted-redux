@@ -1,15 +1,32 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../redux/hooks";
 import { useForm } from "react-hook-form";
 import { IUser } from "../type/globalType";
 import { loginUser } from "../redux/user/userSlice";
+import { toast } from "react-hot-toast";
 
 const Login = () => {
-  const { register, handleSubmit } = useForm<IUser>();
+  const { register, handleSubmit, reset } = useForm<IUser>();
+
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
   const onSubmit = async (data: IUser) => {
-    dispatch(loginUser({ email: data.email, password: data.password }));
+    const response = await dispatch(
+      loginUser({ email: data.email, password: data.password })
+    );
+    if (response.meta.requestStatus === "fulfilled") {
+      toast.success("login succeed");
+      reset();
+      if (location?.state?.from?.pathname) {
+        navigate(location?.state?.from?.pathname, { replace: true });
+      } else {
+        navigate("/allbook");
+      }
+    } else {
+      toast.error("login failed ");
+    }
   };
 
   return (

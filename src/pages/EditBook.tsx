@@ -5,13 +5,12 @@ import { useEditBookMutation, useGetBookQuery } from "../redux/api/apiSlice";
 import { toast } from "react-hot-toast";
 import { Book } from "../type/globalType";
 
-const EditBook = () => {
+const EditBook: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit } = useForm<Book>();
   const { data } = useGetBookQuery(id);
-  console.log(data);
 
   const [editBook] = useEditBookMutation();
   const onSubmit = async (data: Book) => {
@@ -21,9 +20,7 @@ const EditBook = () => {
     };
 
     try {
-      const result = await editBook(updatedData).unwrap();
-
-      console.log(result);
+      await editBook(updatedData).unwrap();
       toast.success("Update successful");
       navigate(`/books/${id}`);
     } catch (error) {

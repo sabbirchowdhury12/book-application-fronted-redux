@@ -1,12 +1,17 @@
 import { useForm } from "react-hook-form";
 import { useAddBookMutation } from "../redux/api/apiSlice";
 import { toast } from "react-hot-toast";
+import { Book } from "../type/globalType";
+import { useAppSelector } from "../redux/hooks";
 
 const AddBook = () => {
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit, reset } = useForm<Book>();
+  const { user } = useAppSelector((state) => state.user);
 
   const [addBook] = useAddBookMutation();
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: Book) => {
+    data.email = user?.email;
+
     const response = await addBook(data);
     if ("data" in response) {
       if (response.data.status === true) {

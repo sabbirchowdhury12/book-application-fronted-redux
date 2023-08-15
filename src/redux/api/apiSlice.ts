@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const api = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:5000",
+    baseUrl: "https://simple-book-app-server.vercel.app",
   }),
   endpoints: (builder) => ({
     getAllBook: builder.query({
@@ -11,33 +11,36 @@ export const api = createApi({
         `/books?search=${params.search}&genre=${params.genre}&year=${params.year}`,
     }),
     getBook: builder.query({
-      query: (id) => `/books/${id}`,
+      query: (id) => `/book/${id}`,
     }),
     deleteBook: builder.mutation({
       query: (id) => ({
-        url: `books/${id}`,
+        url: `book/${id}`,
         method: "DELETE",
       }),
     }),
     editBook: builder.mutation({
       query: ({ id, ...book }) => ({
-        url: `books/${id}`,
+        url: `book/${id}`,
         method: "PATCH",
         body: book,
       }),
     }),
     addReview: builder.mutation({
       query: ({ id, ...review }) => ({
-        url: `books/add-review/${id}`,
+        url: `add-review/${id}`,
         method: "PATCH",
         body: review,
       }),
     }),
     addBook: builder.mutation({
       query: ({ ...book }) => ({
-        url: `books`,
+        url: `book`,
         method: "POST",
-        body: book,
+        body: JSON.stringify(book),
+        headers: {
+          "Content-Type": "application/json",
+        },
       }),
     }),
   }),

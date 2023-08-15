@@ -9,3 +9,11 @@ export interface Book {
   genre: string;
   publicationDate: string;
 }
+
+export interface Book {
+  title: string;
+  author: string;
+  genre: string;
+  publicationDate: string;
+  email?: string | null;
+}

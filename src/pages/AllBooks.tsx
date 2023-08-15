@@ -8,7 +8,7 @@ const AllBooks: React.FC = () => {
   const [searchValue, setSearchValue] = useState("");
   const [year, setYear] = useState("");
   const [genre, setGenre] = useState("");
-  console.log(genre);
+
   const { data } = useGetAllBookQuery(
     {
       search: searchValue,
@@ -19,10 +19,6 @@ const AllBooks: React.FC = () => {
       refetchOnMountOrArgChange: true,
     }
   );
-
-  // const handleSearch = async () => {
-  //   await refetch();
-  // };
 
   const TABLE_HEAD = ["Title", "Author", "Genre", "Publication Date", ""];
 

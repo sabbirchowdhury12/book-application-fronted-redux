@@ -1,15 +1,25 @@
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../redux/hooks";
 import { createUser } from "../redux/user/userSlice";
 import { IUser } from "../type/globalType";
+import { toast } from "react-hot-toast";
 
-const SignUp = () => {
+const SignUp: React.FC = () => {
   const { register, handleSubmit } = useForm<IUser>();
 
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const onSubmit = (data: IUser) => {
-    dispatch(createUser({ email: data.email, password: data.password }));
+  const onSubmit = async (data: IUser) => {
+    const response = await dispatch(
+      createUser({ email: data.email, password: data.password })
+    );
+    if (response.meta.requestStatus === "fulfilled") {
+      toast.success("signup succeed");
+      navigate("/allbook");
+    } else {
+      toast.error("signup failed");
+    }
   };
 
   return (

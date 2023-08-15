@@ -6,8 +6,9 @@ import {
 } from "../redux/api/apiSlice";
 import { useAppSelector } from "../redux/hooks";
 import { toast } from "react-hot-toast";
+import React from "react";
 
-const BookDeatails = () => {
+const BookDeatails: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useAppSelector((state) => state.user);
@@ -50,22 +51,22 @@ const BookDeatails = () => {
       <div className="block    rounded-lg bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] dark:bg-neutral-700">
         <div className="p-6">
           <h5 className="mb-2 text-xl font-medium leading-tight text-neutral-800 dark:text-neutral-50">
-            {data?.author}
+            Author: {data?.author}
           </h5>
           <p className="text-base text-neutral-600 dark:text-neutral-200">
-            {data?.genre}
+            Genre: {data?.genre}
           </p>
         </div>
         <ul className="w-full">
           <li className="w-full border-b-2 border-neutral-100 border-opacity-100 px-6 py-3 dark:border-opacity-50">
-            {data?.title}
+            Title: {data?.title}
           </li>
           <li className="w-full border-b-2 border-neutral-100 border-opacity-100 px-6 py-3 dark:border-opacity-50">
-            {data?.publicationDate}
+            Published Date: {data?.publicationDate}
           </li>
         </ul>
         <div className="p-2">
-          {user?.email !== data?.email && (
+          {user?.email === data?.email && (
             <>
               <Link
                 type="button"
@@ -86,17 +87,26 @@ const BookDeatails = () => {
         <form action="" onSubmit={handleReview}>
           <textarea
             required
-            className="border border-black  w-full p-4 resize-none"
+            className="border border-black mb-4  w-full p-4 resize-none"
             name="review"
             placeholder="write a review"
             id=""
           />
-          <button
-            type="submit"
-            className="bg-black text-white p-1.5 capitalize  rounded m-4"
-          >
-            add a review
-          </button>
+          {user?.email ? (
+            <button
+              type="submit"
+              className="bg-black text-white p-1.5 capitalize  rounded m-4"
+            >
+              add a review
+            </button>
+          ) : (
+            <Link
+              to={"/login"}
+              className="bg-black text-white p-1.5 capitalize  rounded m-4 "
+            >
+              Login to Review
+            </Link>
+          )}
         </form>
         <p className="m-4 underline font-bold text-xl">Reviews:</p>
         {data?.reviews?.map((review: string, ind: number) => {
