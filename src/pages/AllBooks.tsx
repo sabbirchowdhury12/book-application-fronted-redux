@@ -1,19 +1,63 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card, Typography } from "@material-tailwind/react";
 import { useGetAllBookQuery } from "../redux/api/apiSlice";
 import { Book } from "../type/globalType";
 import { Link } from "react-router-dom";
 
 const AllBooks: React.FC = () => {
-  const { data } = useGetAllBookQuery(undefined, {
-    refetchOnMountOrArgChange: true,
-  });
+  const [searchValue, setSearchValue] = useState("");
+  const [year, setYear] = useState("");
+  const [genre, setGenre] = useState("");
+  console.log(genre);
+  const { data } = useGetAllBookQuery(
+    {
+      search: searchValue,
+      genre: genre,
+      year: year,
+    },
+    {
+      refetchOnMountOrArgChange: true,
+    }
+  );
+
+  // const handleSearch = async () => {
+  //   await refetch();
+  // };
 
   const TABLE_HEAD = ["Title", "Author", "Genre", "Publication Date", ""];
 
   return (
     <>
-      <Card className="h-full w-full p-4 mt-10 overflow-scroll">
+      <div className="m-4 mt-10 flex gap-2 flex-col md:flex-row items-center justify-between">
+        <div>
+          <input
+            type="text"
+            onChange={(e) => setSearchValue(e.target.value)}
+            className="border border-black p-1.5 rounded"
+            placeholder="search by title,author,genre"
+          />
+          <input
+            type="text"
+            onChange={(e) => setGenre(e.target.value)}
+            className="border mx-2 border-black p-1.5 rounded"
+            placeholder="filter by genre"
+          />
+          <input
+            type="text"
+            onChange={(e) => setYear(e.target.value)}
+            className="border border-black p-1.5 rounded"
+            placeholder="filter by year ex: 2000"
+          />
+        </div>
+        <Link
+          to={"/addbook"}
+          className="bg-black text-white p-2  text-right font-bold rounded "
+        >
+          Add Book
+        </Link>
+      </div>
+
+      <Card className="h-full w-full p-4 mt-5 overflow-scroll">
         <table className="w-full min-w-max table-auto text-left">
           <thead>
             <tr>
@@ -94,12 +138,6 @@ const AllBooks: React.FC = () => {
           </tbody>
         </table>
       </Card>
-      <Link
-        to={"/addbook"}
-        className="bg-black text-white p-2  mt-6 block w-40 text-center mx-auto font-bold rounded  "
-      >
-        Add Book
-      </Link>
     </>
   );
 };
